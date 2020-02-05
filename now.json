@@ -1,4 +1,5 @@
 {
+  "scope": "marveldbproxy",
   "name": "marveldb",
   "version": 2,
   "env": {
