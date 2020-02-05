@@ -5,9 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "exit 0",
-    "start": "micro",
-    "dev": "micro-dev"
+    "build": "exit 0"
   },
   "repository": {
     "type": "git",
@@ -21,13 +19,10 @@
   },
   "homepage": "https://github.com/emirotin/marveldb#readme",
   "dependencies": {
-    "micro": "^9.3.4",
     "mongodb": "^3.5.2",
     "ms": "^2.1.2",
     "node-fetch": "^2.6.0",
     "query-string": "^6.10.1"
   },
-  "devDependencies": {
-    "micro-dev": "^3.0.0"
-  }
+  "devDependencies": {}
 }

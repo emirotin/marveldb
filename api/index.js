@@ -1,9 +1,8 @@
-const crypto = require("crypto");
-const { send } = require("micro");
-const queryString = require("query-string");
-const fetch = require("node-fetch");
-const { MongoClient } = require("mongodb");
-const ms = require("ms");
+import crypto from "crypto";
+import queryString from "query-string";
+import fetch from "node-fetch";
+import { MongoClient } from "mongodb";
+import ms from "ms";
 
 const MONGO_CONNECTION_STRING = process.env.mongo_connection_string;
 const API_KEY = process.env.marvel_api_key;
@@ -36,36 +35,36 @@ const extraQuery = () => {
   };
 };
 
-module.exports = async (req, res) => {
+export default async (req, res) => {
   const originalUrl = req.url;
+
+  if (!originalUrl.match(/\/api\/v\d+\//)) {
+    return res.status(404).send("Not Found");
+  }
 
   const db = await getConnection();
   const dbCol = db.collection("cache");
-  const cachedData = await dbCol.findOne(
-    { url: originalUrl },
-    {
-      fields: ["data", "updatedAt"]
-    }
-  );
+  const cachedData = await dbCol.findOne({ url: originalUrl });
   if (cachedData && Date.now() - cachedData.updatedAt < ms(CACHE_TTL)) {
-    return { cachedAt: cachedData.updatedAt, ...cachedData.data };
+    return res.json({ cachedAt: cachedData.updatedAt, ...cachedData.data });
   }
 
   let { url, query } = queryString.parseUrl(originalUrl);
-  if (!url.match(/\/v\d+\//)) {
-    send(res, 404);
-    return;
-  }
+
+  url = url.replace("/api", "");
   query = {
     ...query,
     ...extraQuery()
   };
+
   const response = await fetch(
     `${MARVEL_API_PREFIX}${url}?${queryString.stringify(query)}`
   );
+
   if (response.status !== 200) {
-    return send(res, response.status, response.statusText);
+    return res.status(response.status).send(response.statusText);
   }
+
   const data = await response.json();
 
   await dbCol.findOneAndReplace(
@@ -74,5 +73,5 @@ module.exports = async (req, res) => {
     { upsert: true }
   );
 
-  return data;
+  res.json(data);
 };

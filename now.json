@@ -6,5 +6,6 @@
     "mongo_connection_string": "@mongo_connection_string",
     "marvel_api_key": "@marvel_api_key",
     "marvel_secret_key": "@marvel_secret_key"
-  }
+  },
+  "rewrites": [{ "source": "/api/(.*)", "destination": "/api" }]
 }
