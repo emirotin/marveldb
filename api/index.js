@@ -3,6 +3,7 @@ import queryString from "query-string";
 import fetch from "node-fetch";
 import { MongoClient } from "mongodb";
 import ms from "ms";
+import cors from "micro-cors";
 
 const MONGO_CONNECTION_STRING = process.env.mongo_connection_string;
 const API_KEY = process.env.marvel_api_key;
@@ -35,7 +36,7 @@ const extraQuery = () => {
   };
 };
 
-export default async (req, res) => {
+const handler = async (req, res) => {
   const originalUrl = req.url;
 
   if (!originalUrl.match(/\/api\/v\d+\//)) {
@@ -75,3 +76,5 @@ export default async (req, res) => {
 
   res.json(data);
 };
+
+export default cors()(handler);

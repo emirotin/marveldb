@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/emirotin/marveldb#readme",
   "dependencies": {
+    "micro-cors": "^0.1.1",
     "mongodb": "^3.5.2",
     "ms": "^2.1.2",
     "node-fetch": "^2.6.0",
