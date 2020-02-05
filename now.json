@@ -1,5 +1,4 @@
 {
-  "scope": "marveldb",
   "name": "marveldb",
   "version": 2,
   "env": {
