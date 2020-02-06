@@ -1,27 +1,17 @@
 import crypto from "crypto";
 import queryString from "query-string";
 import fetch from "node-fetch";
-import { MongoClient } from "mongodb";
 import ms from "ms";
 import cors from "micro-cors";
 
-const MONGO_CONNECTION_STRING = process.env.mongo_connection_string;
+import getConnection from "./_db";
+
 const API_KEY = process.env.marvel_api_key;
 const SECRET_KEY = process.env.marvel_secret_key;
 
 const MARVEL_API_PREFIX = "https://gateway.marvel.com";
 
-const DB_NAME = "marvel";
 const CACHE_TTL = "7d";
-
-const getConnection = async () => {
-  const client = new MongoClient(MONGO_CONNECTION_STRING, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  });
-  await client.connect();
-  return client.db(DB_NAME);
-};
 
 const extraQuery = () => {
   const ts = Date.now();
